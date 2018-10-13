@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types"],
+    "target": "es2017",
+    "module": "commonjs",
+    "sourceMap": false,
+    "outDir": "service",
+    "allowJs": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+    "skipLibCheck": true
+  },
+  "typeAcquisition": {
+    "enable": false
+  },
+  "include": ["typings.d.ts", "./**/*"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,32 @@
+type Project {
+  demoURL: String
+  description: String
+  edition: String
+  id: String
+  name: String
+  owner: String
+  team: [String]
+}
+
+type Query {
+  project(
+    edition: String
+    id: String
+  ): Project @cacheControl(scope: PRIVATE)
+
+  projects(
+    edition: String
+  ): [Project] @cacheControl(scope: PRIVATE)
+}
+
+type Mutation {
+  updateProject(
+    edition: String
+    id: String
+  ): Project
+
+  deleteProject(
+    edition: String
+    id: String
+  ): Boolean
+}

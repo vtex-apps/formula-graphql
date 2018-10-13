@@ -1,0 +1,22 @@
+{
+  "name": "vtex.formula-graphql",
+  "version": null,
+  "dependencies": {
+    "@vtex/api": "1.0.0",
+    "apollo-server-errors": "^2.0.2",
+    "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.39",
+    "@types/mime-types": "^2.1.0",
+    "@types/node": "^7.0.8",
+    "@types/ramda": "^0.25.38",
+    "tslint": "^5.8.0",
+    "tslint-config-vtex": "^2.0.0",
+    "typescript": "^3.0.3"
+  },
+  "scripts": {
+    "lint": "tsc --noEmit && tslint -c tslint.json './**/*.ts'"
+  },
+  "license": "UNLICENSED"
+}

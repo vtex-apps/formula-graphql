@@ -1,0 +1,32 @@
+{
+  "vendor": "vtex",
+  "name": "formula-graphql",
+  "version": "0.0.0",
+  "title": "GraphQL API for the VTEX Formula Hackathon Manager",
+  "description": "GraphQL schema and resolvers for the VTEX Formula Hackathon Manager.",
+  "credentialType": "absolute",
+  "builders": {
+    "graphql": "1.x",
+    "node": "3.x"
+  },
+  "mustUpdateAt": "2017-09-05",
+  "scripts": {
+    "prereleasy": "bash lint.sh",
+    "postreleasy": "vtex publish"
+  },
+  "policies": [
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "vtexid.vtex.com.br",
+        "path": "/api/vtexid/pub/authenticated/user"
+      }
+    },
+    {
+      "name": "colossus-write-logs"
+    },
+    {
+      "name": "vbase-read-write"
+    }
+  ]
+}
