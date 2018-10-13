@@ -1,4 +1,4 @@
-import {Logger, LRUCache, ServiceContext, VBase} from '@vtex/api'
+import {Logger, LRUCache, VBase} from '@vtex/api'
 
 import Profile from './profile'
 import Projects from './projects'
@@ -16,7 +16,7 @@ export default class Resources {
 
   private vbase: VBase
 
-  constructor (ctx: ServiceContext) {
+  constructor (ctx: ResolverContext) {
     this.logger = new Logger(ctx.vtex)
     this.vbase = new VBase(ctx.vtex, {cacheStorage: vbaseCache})
 

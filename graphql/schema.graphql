@@ -17,12 +17,12 @@ type ProfileData {
 
 type Query {
   project(
-    edition: String
-    id: String
+    edition: String!
+    id: String!
   ): Project @cacheControl(scope: PRIVATE)
 
   projects(
-    edition: String
+    edition: String!
   ): [Project] @cacheControl(scope: PRIVATE)
 
   profile: ProfileData
@@ -30,12 +30,25 @@ type Query {
 
 type Mutation {
   updateProject(
-    edition: String
+    edition: String!
     id: String
+    demoURL: String
+    description: String
+    name: String
   ): Project
 
   deleteProject(
-    edition: String
-    id: String
+    edition: String!
+    id: String!
   ): Boolean
+
+  joinProject(
+    edition: String!
+    id: String!
+  ): Project
+
+  leaveProject(
+    edition: String!
+    id: String!
+  ): Project
 }
