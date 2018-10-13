@@ -8,8 +8,16 @@ declare global {
 
   type Resolver<A, R, P = any> = (parent: P, args: A, ctx: ResolverContext, info: any) => Promise<R>
 
+  interface ProfileData {
+    name: string
+    email: string
+    picture: string | null
+    id: string
+  }
+
   interface ResolverContext extends ServiceContext {
     resources: Resources
+    profile: ProfileData
   }
 
   namespace NodeJS {

@@ -8,6 +8,13 @@ type Project {
   team: [String]
 }
 
+type ProfileData {
+  name: String
+  email: String
+  picture: String
+  id: String
+}
+
 type Query {
   project(
     edition: String
@@ -17,6 +24,8 @@ type Query {
   projects(
     edition: String
   ): [Project] @cacheControl(scope: PRIVATE)
+
+  profile: ProfileData
 }
 
 type Mutation {

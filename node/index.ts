@@ -3,11 +3,9 @@ import './globals'
 import {ServiceContext} from '@vtex/api'
 import {mapObjIndexed} from 'ramda'
 
-import {AuthenticationError} from './AuthenticationError'
+import {profileQueries} from './resolvers/profile'
 import {projectsMutations, projectsQueries} from './resolvers/projects'
 import Resources from './resources'
-
-const VTEX_ID_COOKIE = 'VtexIdclientAutCookie'
 
 const log = (
   {vtex: {account, workspace}}: ServiceContext,
@@ -25,7 +23,7 @@ const log = (
 const statusLabel = (e?: Error) =>
   e ? `error${e.name ? `-${e.name}` : ''}` : 'success'
 
-const prepare = <A, R, P>(resolver: Resolver<A, R, P>) => (parent: P, args: A, ctx: ResolverContext, info: any) => {
+const prepare = <A, R, P>(resolver: Resolver<A, R, P>) => async (parent: P, args: A, ctx: ResolverContext, info: any) => {
   if (!resolver.name) {
     throw new Error('Resolvers must be named')
   }
@@ -35,11 +33,7 @@ const prepare = <A, R, P>(resolver: Resolver<A, R, P>) => (parent: P, args: A, c
   ctx.resources = new Resources(ctx)
 
   try {
-    const VtexIdclientAutCookie = ctx.cookies.get(VTEX_ID_COOKIE)
-    if (!VtexIdclientAutCookie) {
-      throw new AuthenticationError()
-    }
-
+    ctx.profile = await ctx.resources.profile.getProfile()
     return resolver(parent, args, ctx, info)
   } catch (e) {
     err = e
@@ -57,7 +51,10 @@ export default {
   graphql: {
     resolvers: {
       Mutation: mapObjIndexed(prepare, projectsMutations),
-      Query: mapObjIndexed(prepare, projectsQueries),
+      Query: mapObjIndexed(prepare, {
+        ...profileQueries,
+        ...projectsQueries,
+      }),
     },
   },
   statusTrack: metrics.statusTrack,

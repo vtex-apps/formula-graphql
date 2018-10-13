@@ -1,25 +1,26 @@
 import {Logger, LRUCache, ServiceContext, VBase} from '@vtex/api'
 
+import Profile from './profile'
 import Projects from './projects'
 
-const cacheStorage = new LRUCache<string, any>({
+const vbaseCache = new LRUCache<string, any>({
   max: 200,
 })
 
-metrics.trackCache('resources', cacheStorage)
-
-const withCache = {cacheStorage}
+metrics.trackCache('vbase', vbaseCache)
 
 export default class Resources {
   public logger: Logger
+  public profile: Profile
   public projects: Projects
 
   private vbase: VBase
 
   constructor (ctx: ServiceContext) {
     this.logger = new Logger(ctx.vtex)
-    this.vbase = new VBase(ctx.vtex, withCache)
+    this.vbase = new VBase(ctx.vtex, {cacheStorage: vbaseCache})
 
+    this.profile = new Profile(ctx)
     this.projects = new Projects(ctx, this.vbase, this.logger)
   }
 }
