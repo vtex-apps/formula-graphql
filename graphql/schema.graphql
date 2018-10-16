@@ -25,7 +25,7 @@ type Query {
     edition: String!
   ): [Project] @cacheControl(scope: PRIVATE)
 
-  profile: ProfileData
+  profile: ProfileData @cacheControl(scope: PRIVATE)
 }
 
 type Mutation {
