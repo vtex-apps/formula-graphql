@@ -65,7 +65,7 @@ async function leaveProject(_: any, {edition, id}: ProjectArgs, ctx: ResolverCon
 
   const updated = {
     ...saved,
-    team: uniq(difference([email], saved.team)),
+    team: difference(saved.team, [email]),
   }
 
   return ctx.resources.projects.update(edition, id, updated)

@@ -47,7 +47,6 @@ export default class Projects {
         team: [email],
       }
 
-      console.log(edition, generated, newProject)
       await this.vbase.saveJSON(encodeURIComponent(edition), `${generated}.json`, newProject)
       return newProject
     }
