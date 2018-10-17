@@ -17,7 +17,7 @@ export default class Score {
         availableKeys = difference(availableKeys, [best])
         return best
       },
-      range(1,min(availableKeys.length,3))
+      range(0,min(availableKeys.length,3))
     )
     return reduce((result, current) => set(lensProp(current), 3-keysIn(result).length, result), {}, bestElements)
   }
@@ -35,6 +35,6 @@ export default class Score {
       voteFiles.data
     ))
     const scoresByUser = map(Score.calculateUserScore, votes)
-    return reduce(mergeWith(sum), {}, scoresByUser)
+    return reduce(mergeWith((a,b) => a+b), {}, scoresByUser)
   }
 }
