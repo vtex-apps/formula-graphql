@@ -2,6 +2,7 @@ import {Logger, LRUCache, VBase} from '@vtex/api'
 
 import Profile from './profile'
 import Projects from './projects'
+import Scores from './scores'
 import Votes from './votes'
 
 const vbaseCache = new LRUCache<string, any>({
@@ -15,6 +16,7 @@ export default class Resources {
   public profile: Profile
   public projects: Projects
   public votes: Votes
+  public scores: Scores
 
   private vbase: VBase
 
@@ -25,5 +27,6 @@ export default class Resources {
     this.profile = new Profile(ctx)
     this.projects = new Projects(ctx, this.vbase, this.logger)
     this.votes = new Votes(ctx, this.vbase, this.logger)
+    this.scores = new Scores(ctx, this.vbase, this.logger)
   }
 }

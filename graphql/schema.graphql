@@ -20,6 +20,11 @@ type Vote {
   relevance: Int
 }
 
+type Score {
+  projectID: String
+  score: Int
+}
+
 type Query {
   project(
     edition: String!
@@ -35,6 +40,10 @@ type Query {
   votes(
     edition: String!
   ): [Vote] @cacheControl(scope: PRIVATE)
+
+  scores(
+    edition: String!
+  ): [Score] @cacheControl(scope: PUBLIC)
 }
 
 type Mutation {

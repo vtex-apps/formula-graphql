@@ -10,8 +10,8 @@ export interface UserVotes {
 }
 
 export default class Votes {
-  private static getBucket = (edition: string) => `${edition}-votes`
-  private static getUserFile = (id: string) => `${id}.json`
+  public static getBucket = (edition: string) => `${edition}-votes`
+  public static getUserFile = (id: string) => `${id}.json`
 
   constructor (
     public ctx: ResolverContext,
