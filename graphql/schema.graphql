@@ -5,7 +5,7 @@ type Project {
   id: String
   name: String
   owner: String
-  team: [String]
+  team: [ProfileData]
 }
 
 type ProfileData {

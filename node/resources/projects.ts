@@ -10,7 +10,7 @@ export interface Project {
   id?: string
   name?: string
   owner?: string
-  team?: string[]
+  team?: ProfileData[]
 }
 
 export default class Projects {
@@ -44,7 +44,7 @@ export default class Projects {
         edition,
         id: generated,
         owner: email,
-        team: [email],
+        team: [this.ctx.profile],
       }
 
       await this.vbase.saveJSON(encodeURIComponent(edition), `${generated}.json`, newProject)

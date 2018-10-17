@@ -48,24 +48,22 @@ async function deleteProject(_: any, {edition, id}: ProjectArgs, ctx: ResolverCo
 }
 
 async function joinProject(_: any, {edition, id}: ProjectArgs, ctx: ResolverContext): Promise<Project> {
-  const email = ctx.profile.email
   const saved = await ctx.resources.projects.find(edition, id)
 
   const updated = {
     ...saved,
-    team: uniq(concat([email], saved.team)),
+    team: uniq(concat([ctx.profile], saved.team)),
   }
 
   return ctx.resources.projects.update(edition, id, updated)
 }
 
 async function leaveProject(_: any, {edition, id}: ProjectArgs, ctx: ResolverContext): Promise<Project> {
-  const email = ctx.profile.email
   const saved = await ctx.resources.projects.find(edition, id)
 
   const updated = {
     ...saved,
-    team: difference(saved.team, [email]),
+    team: difference(saved.team, [ctx.profile]),
   }
 
   return ctx.resources.projects.update(edition, id, updated)
