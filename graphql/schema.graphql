@@ -15,6 +15,11 @@ type ProfileData {
   id: String
 }
 
+type Vote {
+  execution: Int
+  relevance: Int
+}
+
 type Query {
   project(
     edition: String!
@@ -26,9 +31,20 @@ type Query {
   ): [Project] @cacheControl(scope: PRIVATE)
 
   profile: ProfileData @cacheControl(scope: PRIVATE)
+
+  votes(
+    edition: String!
+  ): [Vote] @cacheControl(scope: PRIVATE)
 }
 
 type Mutation {
+  updateVote(
+    edition: String
+    projectID: String
+    execution: Int
+    relevance: Int
+  ): Vote
+
   updateProject(
     edition: String!
     id: String

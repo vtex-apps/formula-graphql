@@ -5,6 +5,7 @@ import {mapObjIndexed} from 'ramda'
 
 import {profileQueries} from './resolvers/profile'
 import {projectsMutations, projectsQueries} from './resolvers/projects'
+import {votesMutations, votesQueries} from './resolvers/votes'
 import Resources from './resources'
 
 const log = (
@@ -50,10 +51,14 @@ const prepare = <A, R, P>(resolver: Resolver<A, R, P>) => async (parent: P, args
 export default {
   graphql: {
     resolvers: {
-      Mutation: mapObjIndexed(prepare, projectsMutations),
+      Mutation: mapObjIndexed(prepare, {
+        ...projectsMutations,
+        ...votesMutations,
+      }),
       Query: mapObjIndexed(prepare, {
         ...profileQueries,
         ...projectsQueries,
+        ...votesQueries,
       }),
     },
   },
