@@ -1,5 +1,11 @@
-import {values} from 'ramda'
-import {Vote} from '../resources/votes'
+import {mapObjIndexed,values} from 'ramda'
+
+export interface Vote {
+  execution: number
+  relevance: number
+  projectID: string
+  userID: string
+}
 
 interface VotesArgs {
   edition: string
@@ -13,15 +19,15 @@ interface UpdateVoteArgs {
 }
 
 async function votes(_: any, {edition}: VotesArgs, ctx: ResolverContext): Promise<Vote[]> {
-  const {votes: votesResource} = ctx.resources
+  const {profile: {id}, resources: {votes: votesResource} } = ctx
   const userVotes = await votesResource.getVotes(edition)
-  return values(userVotes)
+  return values(mapObjIndexed((vote,projectID) => ({...vote,projectID,userID:id}), userVotes))
 }
 
 async function updateVote(_: any, {edition,projectID,execution,relevance}: UpdateVoteArgs, ctx: ResolverContext): Promise<Vote> {
-  const {votes: votesResource} = ctx.resources
+  const {profile: {id}, resources: {votes: votesResource} } = ctx
   const vote = await votesResource.setVote(edition, projectID, {execution,relevance})
-  return vote
+  return {...vote,projectID,userID:id}
 }
 
 export const votesMutations = {

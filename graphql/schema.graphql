@@ -16,6 +16,8 @@ type ProfileData {
 }
 
 type Vote {
+  projectID: String
+  userID: String
   execution: Int
   relevance: Int
 }

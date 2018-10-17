@@ -12,10 +12,7 @@ interface Score {
 async function scores(_: any, {edition}: ScoresArgs, ctx: ResolverContext): Promise<Score[]> {
   const {scores: scoresResource} = ctx.resources
   const projectScores = await scoresResource.getScores(edition)
-  return values(mapObjIndexed(
-    (score, projectID) => ({score, projectID}),
-    projectScores
-  ))
+  return values(mapObjIndexed((score, projectID) => ({score, projectID}), projectScores))
 }
 
 export const scoreQueries = {
