@@ -1,20 +1,15 @@
-import {mapObjIndexed, values} from 'ramda'
+import {ScoreData} from '../resources/scores'
 
 interface ScoresArgs {
   edition: string
 }
 
-interface Score {
-  projectID: string
-  score: number
-}
-
-async function scores(_: any, {edition}: ScoresArgs, ctx: ResolverContext): Promise<Score[]> {
+async function updateScores(_: any, {edition}: ScoresArgs, ctx: ResolverContext): Promise<ScoreData[]> {
   const {scores: scoresResource} = ctx.resources
-  const projectScores = await scoresResource.getScores(edition)
-  return values(mapObjIndexed((score, projectID) => ({score, projectID}), projectScores))
+  const projectScores = await scoresResource.updateScores(edition)
+  return projectScores
 }
 
-export const scoreQueries = {
-  scores,
+export const scoreMutations = {
+  updateScores,
 }

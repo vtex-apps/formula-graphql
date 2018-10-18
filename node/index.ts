@@ -5,7 +5,7 @@ import {mapObjIndexed} from 'ramda'
 
 import {profileQueries} from './resolvers/profile'
 import {projectsMutations, projectsQueries} from './resolvers/projects'
-import {scoreQueries} from './resolvers/scores'
+import {scoreMutations} from './resolvers/scores'
 import {votesMutations, votesQueries} from './resolvers/votes'
 import Resources from './resources'
 
@@ -55,12 +55,12 @@ export default {
       Mutation: mapObjIndexed(prepare, {
         ...projectsMutations,
         ...votesMutations,
+        ...scoreMutations,
       }),
       Query: mapObjIndexed(prepare, {
         ...profileQueries,
         ...projectsQueries,
         ...votesQueries,
-        ...scoreQueries,
       }),
     },
   },
