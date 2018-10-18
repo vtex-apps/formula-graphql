@@ -20,10 +20,10 @@ export default class Score {
 
   private static calculateUserScore(votes: UserVotes): ScoresByProject {
     const summedVotes = mapObjIndexed(compose(sum,values), votes)
-    const favouriteProjects = slice(0, SCORE_RECEIVING_PROJECTS, sort((a,b) => summedVotes[a] - summedVotes[b], keysIn(summedVotes)))
+    const favouriteProjects = slice(0, SCORE_RECEIVING_PROJECTS, sort((a,b) => summedVotes[b] - summedVotes[a], keysIn(summedVotes)))
     return mapObjIndexed((_, projectID) => {
       const position = findIndex(equals(projectID), favouriteProjects)
-      return position === -1 ? 0 : SCORE_RECEIVING_PROJECTS + position
+      return position === -1 ? 0 : SCORE_RECEIVING_PROJECTS - position
     }, votes)
   }
 
