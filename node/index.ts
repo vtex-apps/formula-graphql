@@ -5,7 +5,7 @@ import {mapObjIndexed} from 'ramda'
 
 import {profileQueries} from './resolvers/profile'
 import {projectsMutations, projectsQueries} from './resolvers/projects'
-import {scoreMutations} from './resolvers/scores'
+import {scoreMutations, scoreQueries} from './resolvers/scores'
 import {votesMutations, votesQueries} from './resolvers/votes'
 import Resources from './resources'
 
@@ -61,6 +61,7 @@ export default {
         ...profileQueries,
         ...projectsQueries,
         ...votesQueries,
+        ...scoreQueries,
       }),
     },
   },

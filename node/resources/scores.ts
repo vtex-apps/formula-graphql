@@ -1,5 +1,5 @@
 import {Logger, VBase} from '@vtex/api'
-import {compose, equals, findIndex, head, keysIn, last, map, mapObjIndexed, mergeWith, reduce, slice, sort, sum, toPairs, values} from 'ramda'
+import {compose, equals, findIndex, keysIn, map, mapObjIndexed, mergeWith, reduce, slice, sort, sum, values} from 'ramda'
 
 import Votes, {UserVotes} from './votes'
 
@@ -43,6 +43,11 @@ export default class Score {
     const scores: ScoresByProject = reduce(mergeWith((a,b) => a+b), {}, scoresByUser)
     const scoreData = values(mapObjIndexed((score, projectID) => ({score,projectID}), scores))
     await this.vbase.saveJSON(Score.getBucket(edition), Score.file, scoreData)
+    return scoreData
+  }
+
+  public getScores = async (edition: string): Promise<ScoreData[]> => {
+    const scoreData = await this.vbase.getJSON<ScoreData[]>(Score.getBucket(edition), Score.file, true) || []
     return scoreData
   }
 }

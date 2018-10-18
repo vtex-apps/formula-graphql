@@ -42,6 +42,10 @@ type Query {
   votes(
     edition: String!
   ): [Vote] @cacheControl(scope: PRIVATE)
+
+  scores(
+    edition: String!
+  ): [Score] @cacheControl(scope: PRIVATE)
 }
 
 type Mutation {
