@@ -67,6 +67,7 @@ export default class Profile {
 
     if (!profile) {
       profile = await this.fetchFallbackProfile()
+      profileCache.set(this.vtexIdToken, {profile})
     }
 
     if (!profile || !profile.email || !VTEX_EMAIL_REGEX.test(profile.email)) {
