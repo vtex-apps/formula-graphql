@@ -3,6 +3,7 @@ import './globals'
 import {ServiceContext} from '@vtex/api'
 import {mapObjIndexed} from 'ramda'
 
+import {infoQueries} from './resolvers/info'
 import {profileQueries} from './resolvers/profile'
 import {projectsMutations, projectsQueries} from './resolvers/projects'
 import {scoreMutations, scoreQueries} from './resolvers/scores'
@@ -58,6 +59,7 @@ export default {
         ...scoreMutations,
       }),
       Query: mapObjIndexed(prepare, {
+        ...infoQueries,
         ...profileQueries,
         ...projectsQueries,
         ...votesQueries,

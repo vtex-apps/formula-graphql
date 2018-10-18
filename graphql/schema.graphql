@@ -27,6 +27,19 @@ type Score {
   score: Int
 }
 
+enum FormulaStatus {
+  REGISTRATION
+  RUNNING
+  VOTING
+  RESULTS
+}
+
+type InfoData {
+  status: FormulaStatus
+  timeRemainingSeconds: Int
+  timeTotalSeconds: Int
+}
+
 type Query {
   project(
     edition: String!
@@ -46,6 +59,10 @@ type Query {
   scores(
     edition: String!
   ): [Score] @cacheControl(scope: PRIVATE)
+
+  info(
+    edition: String!
+  ): InfoData @cacheControl(scope: PRIVATE)
 }
 
 type Mutation {
