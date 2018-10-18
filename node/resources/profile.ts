@@ -2,6 +2,12 @@ import {HttpClient, LRUCache, ServiceContext} from '@vtex/api'
 
 import {AuthenticationError, NotVTEXUserError} from '../errors'
 
+interface VtexIdUser {
+  userId: string
+  user: string
+  userType: string
+}
+
 const FIVE_MIN_MS = 5 * 60 * 1000
 const VTEX_ID_COOKIE = 'VtexIdclientAutCookie'
 const VTEX_EMAIL_REGEX = /\@vtex\.com(\.br)?$/
@@ -14,11 +20,22 @@ const profileCache = new LRUCache<string, any>({
 
 metrics.trackCache('profile', profileCache)
 
+const capitalizeFirstLetter = (s: string) => {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+const emailToName = (email: string) => {
+  const [user] = email.split('@')
+  const maybeWords = user.split('.')
+  return maybeWords.map(capitalizeFirstLetter).join(' ')
+}
+
 export default class Profile {
   private http: HttpClient
   private vtexIdToken: string
   private headers: Record<string, string>
-  private path: string
+  private topbarPath: string
+  private vtexIdPath: string
 
   public constructor(ctx: ServiceContext) {
     this.http = new HttpClient({
@@ -28,7 +45,8 @@ export default class Profile {
 
     this.vtexIdToken = ctx.cookies.get(VTEX_ID_COOKIE)
 
-    this.path = `http://${ctx.vtex.account}.vtexcommercestable.com.br/api/license-manager/site/pvt/newtopbar`
+    this.topbarPath = `http://${ctx.vtex.account}.vtexcommercestable.com.br/api/license-manager/site/pvt/newtopbar`
+    this.vtexIdPath = `http://vtexid.vtex.com.br/api/vtexid/pub/authenticated/user?authToken=${this.vtexIdToken}`
 
     this.headers = {
       'Proxy-Authorization': ctx.vtex.authToken,
@@ -41,7 +59,15 @@ export default class Profile {
       throw new AuthenticationError()
     }
 
-    const {profile}: {profile: ProfileData} = await profileCache.getOrSet(this.vtexIdToken, this.fetchProfile)
+    let profile
+
+    const topbarResponse: {profile: ProfileData} = await profileCache.getOrSet(this.vtexIdToken, this.fetchProfile)
+
+    profile = topbarResponse.profile
+
+    if (!profile) {
+      profile = await this.fetchFallbackProfile()
+    }
 
     if (!profile || !profile.email || !VTEX_EMAIL_REGEX.test(profile.email)) {
       throw new NotVTEXUserError()
@@ -50,5 +76,18 @@ export default class Profile {
     return profile
   }
 
-  private fetchProfile = () => this.http.get(this.path, {headers: this.headers})
+  private fetchProfile = () => this.http.get(this.topbarPath, {headers: this.headers})
+
+  private fetchFallbackProfile = () =>
+    this.http.get(this.vtexIdPath, {headers: {'Proxy-Authorization': this.headers['Proxy-Authorization']}})
+    .then((vtexIdUser: VtexIdUser) => ({
+      email: vtexIdUser.user,
+      id: vtexIdUser.userId.replace(/\-/g, '').toLowerCase(),
+      name: emailToName(vtexIdUser.user),
+      picture: null,
+    }))
+    .catch((e) => {
+      console.error(e)
+      return null
+    })
 }
