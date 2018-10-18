@@ -43,7 +43,7 @@ export default class Profile {
 
     const {profile}: {profile: ProfileData} = await profileCache.getOrSet(this.vtexIdToken, this.fetchProfile)
 
-    if (!profile.email || !VTEX_EMAIL_REGEX.test(profile.email)) {
+    if (!profile || !profile.email || !VTEX_EMAIL_REGEX.test(profile.email)) {
       throw new NotVTEXUserError()
     }
 
