@@ -42,8 +42,13 @@ export default class Score {
     const scoresByUser = map(Score.calculateUserScore, votes)
     const scores: ScoresByProject = reduce(mergeWith((a,b) => a+b), {}, scoresByUser)
     const scoreData = values(mapObjIndexed((score, projectID) => ({score,projectID}), scores))
-    await this.vbase.saveJSON(Score.getBucket(edition), Score.file, scoreData)
-    return scoreData
+    const sortedScoreData = sort((a,b) => a.score - b.score, scoreData)
+
+    const cutPosition = Math.min(3, sortedScoreData.length)
+    const finishers = sortedScoreData.slice(0,cutPosition)
+
+    await this.vbase.saveJSON(Score.getBucket(edition), Score.file, finishers)
+    return finishers
   }
 
   public getScores = async (edition: string): Promise<ScoreData[]> => {
