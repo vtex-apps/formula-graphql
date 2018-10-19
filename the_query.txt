@@ -1,0 +1,1 @@
+curl 'https://victorsenam--vtexpages.myvtex.com/_v/graphql/private/v1?' -H 'cookie: VtexIdclientAutCookie='(vtex local token) -H 'content-type: application/json' -H 'accept: application/json' -H 'cache-control: no-cache'  --data-binary '{"query":"mutation {\n  updateScores(edition: \"2018.10\") {\n    projectID\n  }\n}","variables":null}' --verbose
