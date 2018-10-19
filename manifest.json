@@ -1,7 +1,7 @@
 {
   "vendor": "vtex",
   "name": "formula-graphql",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "title": "GraphQL API for the VTEX Formula Hackathon Manager",
   "description": "GraphQL schema and resolvers for the VTEX Formula Hackathon Manager.",
   "credentialType": "absolute",
