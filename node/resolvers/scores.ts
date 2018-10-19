@@ -1,3 +1,4 @@
+import {map} from 'ramda'
 import {ScoreData} from '../resources/scores'
 
 interface ScoresArgs {
@@ -16,7 +17,23 @@ async function scores(_: any, {edition}: ScoresArgs, ctx: ResolverContext): Prom
   return scoreData
 }
 
+async function finalists(_: any, {edition}: ScoresArgs, ctx: ResolverContext): Promise<any[]> {
+  const {scores: scoresResource, projects: projectsResource} = ctx.resources
+  const scoreData = await scoresResource.getScores(edition)
+  const initialCutPosition = Math.min(3, scoreData.length)
+  let cutPosition = initialCutPosition
+  while (cutPosition < scoreData.length && scoreData[cutPosition].score === scoreData[initialCutPosition-1].score) {
+    cutPosition++
+  }
+  const finalistsData = scoreData.slice(0,cutPosition)
+  const finalistsPromises = map(finalist => projectsResource.find(edition, finalist.projectID), finalistsData)
+  const finalistProjects = await Promise.all(finalistsPromises)
+  console.log(finalistProjects)
+  return finalistProjects || []
+}
+
 export const scoreQueries = {
+  finalists,
   scores,
 }
 

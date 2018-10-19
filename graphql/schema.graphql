@@ -63,6 +63,10 @@ type Query {
   info(
     edition: String!
   ): InfoData @cacheControl(scope: PRIVATE)
+
+  finalists(
+    edition: String!
+  ): [Project] @cacheControl(scope: PRIVATE)
 }
 
 type Mutation {
