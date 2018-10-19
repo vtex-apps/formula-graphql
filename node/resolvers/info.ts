@@ -20,8 +20,12 @@ const editions = {
 
 const VOTING_PERIOD = 2 * 60 * 60 * 1000
 
-function info(_: any, {edition}: any): FormulaInfo {
+async function info(_: any, {edition}: any, ctx: any): Promise<FormulaInfo> {
   const {startDate, timeTotalSeconds} = editions[edition]
+  const {resources: {scores: scoresResource}} = ctx
+
+  const scores = await scoresResource.getScores(edition)
+  console.log('scores', scores)
 
   const nowMillis = (new Date()).getTime()
   const startDateMillis = startDate.getTime()
@@ -31,7 +35,7 @@ function info(_: any, {edition}: any): FormulaInfo {
     ? FormulaStatus.REGISTRATION
     : nowMillis < finishDateMillis
       ? FormulaStatus.RUNNING
-      : nowMillis < finishDateMillis + VOTING_PERIOD
+      : scores.length === 0
         ? FormulaStatus.VOTING
         : FormulaStatus.RESULTS
 

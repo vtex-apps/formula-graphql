@@ -28,7 +28,6 @@ async function finalists(_: any, {edition}: ScoresArgs, ctx: ResolverContext): P
   const finalistsData = scoreData.slice(0,cutPosition)
   const finalistsPromises = map(finalist => projectsResource.find(edition, finalist.projectID), finalistsData)
   const finalistProjects = await Promise.all(finalistsPromises)
-  console.log(finalistProjects)
   return finalistProjects || []
 }
 
