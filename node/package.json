@@ -1,6 +1,6 @@
 {
   "name": "vtex.formula-graphql",
-  "version": null,
+  "version": "0.2.3",
   "dependencies": {
     "@vtex/api": "1.0.0",
     "apollo-server-errors": "^2.0.2",
